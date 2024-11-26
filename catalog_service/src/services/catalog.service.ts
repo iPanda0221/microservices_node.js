@@ -1,11 +1,18 @@
 import { ICatalogRepository } from "../interface/catalogRepository.interface";
 
 export class CatalogService {
-  private _repo: ICatalogRepository;
+  private _repository: ICatalogRepository;
 
-  ConstructorParameters(repository: ICatalogRepository) {}
-
-  createProduct(input: any) {}
+  constructor(repository: ICatalogRepository) {
+    this._repository = repository;
+  }
+  async createProduct(input: any) {
+    const data = await this._repository.create(input);
+    if (!data.id) {
+      throw new Error("unable to create product");
+    }
+    return data;
+  }
 
   updateProduct(input: any) {}
 
