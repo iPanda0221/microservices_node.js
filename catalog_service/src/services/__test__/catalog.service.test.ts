@@ -1,16 +1,9 @@
 import { ICatalogRepository } from "../../interface/catalogRepository.interface";
 import { Product } from "../../models/product.model";
 import { MockCatalogRepository } from "../../repository/mockCatalog_repository";
+import { ProductFactory } from "../../utils/fixtures";
 import { CatalogService } from "../catalog.service";
 import { faker } from "@faker-js/faker";
-import { Factory } from "rosie";
-
-const productFactory = new Factory<Product>()
-  .attr("id", faker.number.int({ min: 1, max: 1000 }))
-  .attr("name", faker.commerce.productName)
-  .attr("description", faker.commerce.productDescription)
-  .attr("stock", faker.number.int({ min: 10, max: 100 }))
-  .attr("price", +faker.commerce.price());
 
 const mockProcduct = (rest: any) => {
   return {
@@ -109,7 +102,7 @@ describe("catalogService", () => {
     test("should get products by offset and limit", async () => {
       const service = new CatalogService(repository);
       const randomLimit = faker.number.int({ min: 10, max: 50 });
-      const products = productFactory.buildList(randomLimit);
+      const products = ProductFactory.buildList(randomLimit);
       jest
         .spyOn(repository, "find")
         .mockImplementationOnce(() => Promise.resolve(products));
@@ -138,7 +131,7 @@ describe("catalogService", () => {
   describe("getProduct", () => {
     test("should get products by id", async () => {
       const service = new CatalogService(repository);
-      const product = productFactory.build();
+      const product = ProductFactory.build();
       jest
         .spyOn(repository, "findOne")
         .mockImplementationOnce(() => Promise.resolve(product));
@@ -151,7 +144,7 @@ describe("catalogService", () => {
   describe("deleteProduct", () => {
     test("should delete product by id", async () => {
       const service = new CatalogService(repository);
-      const product = productFactory.build();
+      const product = ProductFactory.build();
       jest
         .spyOn(repository, "delete")
         .mockImplementationOnce(() => Promise.resolve({ id: product.id }));
